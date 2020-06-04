@@ -52,8 +52,38 @@ for (const item of itemsToCollect) {
     item.addEventListener("click", handleSelectedItem)
 }
 
-function handleSelectedItem(event) {
-    const itemId = event.target.dataset.id;
-    console.log()
-}
 
+const collectedItems = document.querySelector("input[name=items]");
+
+let selectedItems = [];
+
+function handleSelectedItem(event) {
+    const itemLi = event.target;
+
+    // Add or remove a selected class
+    itemLi.classList.toggle("selected");
+
+    const itemId = itemLi.dataset.id;
+
+    // check if exists selected items, case exists get the selected ones
+    const alreadySelected = selectedItems.findIndex(item => {
+        const itemFound = item == itemId; // this is true or false
+        return itemFound
+    })
+
+    // If it is already selected, take of the selection
+    if(alreadySelected >= 0) {
+        const filteredItems = selectedItems.filter(item => {
+            const itemIsDifferent = item != itemId
+            return itemIsDifferent
+        })
+
+        selectedItems = filteredItems;
+    } else {
+        // If it is not selected, add the selection
+        selectedItems.push(itemId);
+    }
+
+    // Update the hidden field with the selected data
+    collectedItems.value = selectedItems;
+}
